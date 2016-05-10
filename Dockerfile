@@ -8,8 +8,7 @@ RUN apt-get update && \
   echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Add image configuration and scripts
-ADD mysql-setup.sh /mysql-setup.sh
-ADD chown-craft.sh /chown-craft.sh
+ADD setup_craft.sh /setup_craft.sh
 ADD start-apache2.sh /start-apache2.sh
 ADD start-mysqld.sh /start-mysqld.sh
 ADD run.sh /run.sh

@@ -10,6 +10,7 @@ if [[ ! -d $VOLUME_HOME/mysql ]]; then
     mysql_install_db > /dev/null 2>&1
     echo "=> Done!"  
     /create_mysql_admin_user.sh
+    /setup_craft.sh
 else
     echo "=> Using an existing volume of MySQL"
 fi
