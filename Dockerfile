@@ -9,6 +9,7 @@ RUN apt-get update && \
 
 # Add image configuration and scripts
 ADD mysql-setup.sh /mysql-setup.sh
+ADD chown-craft.sh /chown-craft.sh
 ADD start-apache2.sh /start-apache2.sh
 ADD start-mysqld.sh /start-mysqld.sh
 ADD run.sh /run.sh
@@ -29,11 +30,6 @@ RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# Setup Craft
-WORKDIR "/var/www"
-RUN mkdir -p /var/www/craft/storage
-RUN chown -R www-data /var/www/craft
-
 # Setup Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '92102166af5abdb03f49ce52a40591073a7b859a86e8ff13338cf7db58a19f7844fbc0bb79b2773bf30791e935dbd938') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
@@ -46,7 +42,8 @@ ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
 # Add Volumes
-VOLUME  ["/etc/mysql", "/var/lib/mysql", "/var/www/craft/storage"]
+WORKDIR "/var/www"
+VOLUME  ["/etc/mysql", "/var/lib/mysql"]
 
 EXPOSE 80 3306
 CMD ["/run.sh"]
