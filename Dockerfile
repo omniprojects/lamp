@@ -29,10 +29,18 @@ RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# Setup Storage
+# Setup Craft
+WORKDIR "/var/www"
 RUN mkdir -p /var/www/craft/storage && chown -R www-data /var/www/craft/storage
 
-#Environment variables to configure php
+# Setup Composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '92102166af5abdb03f49ce52a40591073a7b859a86e8ff13338cf7db58a19f7844fbc0bb79b2773bf30791e935dbd938') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+RUN php composer-setup.php --filename=composer --install-dir=/usr/local/bin
+RUN php -r "unlink('composer-setup.php');"
+RUN composer --version
+
+# Environment variables to configure php
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
