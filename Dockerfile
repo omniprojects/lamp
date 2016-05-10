@@ -24,18 +24,19 @@ RUN rm -rf /var/lib/mysql/*
 ADD create_mysql_admin_user.sh /create_mysql_admin_user.sh
 RUN chmod 755 /*.sh
 
-# config to enable .htaccess
+# Apache Config
+RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# setup for craft storage
+# Setup Storage
 RUN mkdir -p /var/www/craft/storage && chown -R www-data /var/www/craft/storage
 
 #Environment variables to configure php
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
-# Add volumes for MySQL 
+# Add Volumes for MySQL 
 VOLUME  ["/etc/mysql", "/var/lib/mysql", "/var/www/craft/storage"]
 
 EXPOSE 80 3306
