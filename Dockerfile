@@ -31,7 +31,8 @@ RUN a2enmod rewrite
 
 # Setup Craft
 WORKDIR "/var/www"
-RUN mkdir -p /var/www/craft/storage && chown -R www-data /var/www/craft/storage
+RUN mkdir -p /var/www/craft/storage
+RUN chown -R www-data /var/www/craft
 
 # Setup Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -44,7 +45,7 @@ RUN composer --version
 ENV PHP_UPLOAD_MAX_FILESIZE 10M
 ENV PHP_POST_MAX_SIZE 10M
 
-# Add Volumes for MySQL 
+# Add Volumes
 VOLUME  ["/etc/mysql", "/var/lib/mysql", "/var/www/craft/storage"]
 
 EXPOSE 80 3306
