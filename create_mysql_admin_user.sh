@@ -17,6 +17,8 @@ echo "=> Creating MySQL admin user with ${_word} password"
 mysql -uroot -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
 mysql -uroot -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
 
+/setup_craft.sh
+
 echo "=> Done!"
 
 echo "========================================================================"
