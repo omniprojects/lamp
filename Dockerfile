@@ -28,6 +28,7 @@ RUN chmod 755 /*.sh
 RUN ln -s /etc/php5/mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini
 ADD apache_default /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
+RUN usermod -u 1000 www-data
 
 # Setup Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
